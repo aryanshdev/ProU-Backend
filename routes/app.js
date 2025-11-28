@@ -1,6 +1,20 @@
 const router = require("express").Router();
 const dbCon = require("../database/dbConnection");
 
+router.put("/markPresentAbsent", async(req,res)=>{
+   const {id, status} = req.body;
+   console.log(id,status)
+   try {
+    await dbCon.none("UPDATE employees SET status = $1 WHERE id  = $2", [
+     status, id
+    ])
+    res.sendStatus(200)
+   } catch (error) {
+    console.log(error)
+      res.sendStatus(500)
+   }
+});
+
 router.post("/createEmp", async (req, res) => {
   console.log("req rec")
   const data = req.body;
@@ -41,6 +55,16 @@ router.put("/updateDetails", async (req, res) => {
   }
 });
 
-router.delete("/rmEmp", (req, res) => {});
+router.delete("/rmEmp", async(req, res) => {
+  const id = req.body.id;
+  try {
+    await dbCon.none("DELETE FROM employees WHERE id = $1", [id])
+    res.sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+
+});
 
 module.exports = router;

@@ -13,12 +13,12 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: "/" }),
+  passport.authenticate("google", { session: false, failureRedirect: "https://pro-u-frontend-theta.vercel.app" }),
   (req, res) => {
     const token = jwt.sign(
       { id: req.user.id, name: req.user.displayName, email: req.user.emails[0].value, pfp : req.user.photos[0]['value'] },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "10h" }
     );
     res
       .cookie("auth", token)

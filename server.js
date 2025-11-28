@@ -14,7 +14,8 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
     credentials:true,
-    "origin": "*"
+    "origin": "*",
+    methods : ["PUT","DELETE", 'POST', 'GET']
 }));
 const port = process.env.PORT || 3000;
 
@@ -23,7 +24,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:10000/auth/google/callback",
+      callbackURL: "https://prou-backend-uywy.onrender.com/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);

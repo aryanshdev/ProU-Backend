@@ -22,7 +22,7 @@ router.get(
     );
     res
       .cookie("auth", token)
-      .redirect(`http://localhost:3000/dashboard?token=${token}`);
+      .redirect(`https://pro-u-frontend-theta.vercel.app/dashboard?token=${token}`);
   }
 );
 

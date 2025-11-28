@@ -44,14 +44,16 @@ router.get("/allEmp", async (_, res) => {
 
 router.put("/updateDetails", async (req, res) => {
   const data = req.body;
+  console.log(data)
   try {
     await dbCon.none(
       "UPDATE employees set name= $2, role = $3, department = $4, status = $5, salary=$6 WHERE id = $1",
       [data.id, data.name, data.role, data.dept, data.status, data.salary]
     );
-    res.status(200);
+    res.sendStatus(200);
   } catch (err) {
-    res.status(500);
+    console.log(err)
+    res.sendStatus(500);
   }
 });
 

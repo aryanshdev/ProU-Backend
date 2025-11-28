@@ -2,15 +2,18 @@ const router = require("express").Router();
 const dbCon = require("../database/dbConnection");
 
 router.post("/createEmp", async (req, res) => {
+  console.log("req rec")
   const data = req.body;
+  console.log(data)
   try {
    const genID= await dbCon.one(
       "INSERT INTO employees(name, role, department, status, salary) VALUES($1, $2, $3, $4, $5) RETURNING id;",
-      [data.name, data.role, data.dept, data.status, data.salary]
+      [data.name, data.role, data.department, data.status, data.salary]
     );
-
+    console.log("Created")
     res.json({ id: genID.id });
   } catch (err) {
+    console.error("DATABASE ERROR:", err);
     res.status(500);
   }
 });

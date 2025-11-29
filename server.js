@@ -2,7 +2,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const appRouter = require("./routes/app");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const { router: authRouter, ensureAuthenticated } = require("./routes/auth");
 const passport = require("passport");
@@ -19,12 +18,13 @@ app.use(cors({
 }));
 const port = process.env.PORT || 3000;
 
+// setup password for google auth
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://prou-backend-uywy.onrender.com/auth/google/callback",
+      callbackURL: process.env.BACKEND_URL+"/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
@@ -34,9 +34,17 @@ passport.use(
 
 app.use(passport.initialize());
 
+// use the auth routes
 app.use("/auth", authRouter);
+// use the app route after ensuriong authentication
 app.use("/app", ensureAuthenticated, appRouter);
 
+// for overcoming render's service spindown
+app.get("/keepAlive", (req, res) => {
+  res.send("Server is alive");
+});
+
+// listen to port
 app.listen(port, () => {
   console.log(`Server Up At ${port}`);
 });

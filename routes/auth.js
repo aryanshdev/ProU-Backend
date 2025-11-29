@@ -13,28 +13,40 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: "https://pro-u-frontend-theta.vercel.app" }),
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "http://localhost:3000",
+  }),
   (req, res) => {
     const token = jwt.sign(
-      { id: req.user.id, name: req.user.displayName, email: req.user.emails[0].value, pfp : req.user.photos[0]['value'] },
+      {
+        id: req.user.id,
+        name: req.user.displayName,
+        email: req.user.emails[0].value,
+        pfp: req.user.photos[0]["value"],
+      },
       process.env.JWT_SECRET,
       { expiresIn: "10h" }
     );
     res
       .cookie("auth", token)
-      .redirect(`https://pro-u-frontend-theta.vercel.app/dashboard?token=${token}`);
+      .redirect(
+        `http://localhost:3000/dashboard?token=${token}`
+      );
   }
 );
 
 router.get("/whoami", ensureAuthenticated, (req, res) => {
   const token = req.headers["auth"];
-  const data = jwt.verify(token,process.env.JWT_SECRET);
+  const data = jwt.verify(token, process.env.JWT_SECRET);
   res.json(data);
 });
 
 function ensureAuthenticated(req, res, next) {
   const token = req.headers["auth"];
-  if (!token) return res.sendStatus(403);
+  if (!token) {
+    return res.sendStatus(403);
+  }
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       return res.sendStatus(403);

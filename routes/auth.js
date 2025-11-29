@@ -15,7 +15,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "http://localhost:3000",
+    failureRedirect: "https://pro-u-frontend-theta.vercel.app",
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -31,7 +31,7 @@ router.get(
     res
       .cookie("auth", token)
       .redirect(
-        `http://localhost:3000/dashboard?token=${token}`
+        `https://pro-u-frontend-theta.vercel.app/dashboard?token=${token}`
       );
   }
 );

@@ -63,7 +63,7 @@ By default the server will listen on `PORT` or `3000`.
 
 All `/app` endpoints are protected. Include the JWT token in the `auth` header.
 
-Base: http://localhost:3000
+Base: https://pro-u-frontend-theta.vercel.app
 
 ### 1) Create employee
 - Method: POST
